@@ -1,3 +1,4 @@
+import 'package:wakelock/wakelock.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,13 @@ class _StopWatchWidgetState extends State<StopWatchWidget> {
   Timer? _timer;
 
   void startStopWatch() {
+    Wakelock.enable().onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Failed to enable wakelock."),
+        ),
+      );
+    });
     setState(() {
       _isRunning = true;
       _isReset = false;
@@ -34,6 +42,13 @@ class _StopWatchWidgetState extends State<StopWatchWidget> {
   }
 
   void resetStopWatch() {
+    Wakelock.disable().onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Failed to disable wakelock."),
+        ),
+      );
+    });
     setState(() {
       _isReset = true;
     });
